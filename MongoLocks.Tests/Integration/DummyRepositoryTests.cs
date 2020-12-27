@@ -94,6 +94,19 @@ namespace MongoLocks.Tests.Integration
             await Assert.ThrowsAsync<LockException>(async () => await sut.ReleaseLockAsync(newItem, CancellationToken.None));
         }
 
+        [Fact]
+        public async Task ReleaseLock_should_fail_if_item_locked_by_somebody_else()
+        {
+            var sut = new DummyRepository(_db, TimeSpan.FromMinutes(1));
+
+            var newItem = new Dummy(Guid.NewGuid(), "lorem ipsum", null, null);
+            var lockedItem = await sut.LockAsync(newItem.Id, newItem, CancellationToken.None);
+
+            var updatedItem = lockedItem with { Value = "dolor amet", LockId = Guid.NewGuid()};
+
+            await Assert.ThrowsAsync<LockException>(async () => await sut.ReleaseLockAsync(updatedItem, CancellationToken.None));
+        }
+
         public void Dispose()
         {
             _client?.DropDatabase(_dbName);
