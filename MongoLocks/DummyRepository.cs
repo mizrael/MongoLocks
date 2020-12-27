@@ -79,7 +79,7 @@ namespace MongoLocks
             }
         }
 
-        public async Task ReleaseLock(Dummy item, CancellationToken cancellationToken = default)
+        public async Task ReleaseLockAsync(Dummy item, CancellationToken cancellationToken = default)
         {
             if (item == null) 
                 throw new ArgumentNullException(nameof(item));

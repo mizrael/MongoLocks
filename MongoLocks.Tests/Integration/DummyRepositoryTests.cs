@@ -74,7 +74,7 @@ namespace MongoLocks.Tests.Integration
 
             var updatedItem = lockedItem with { Value = "dolor amet"};
 
-            await sut.ReleaseLock(updatedItem, CancellationToken.None);
+            await sut.ReleaseLockAsync(updatedItem, CancellationToken.None);
 
             var coll = _db.GetCollection<Dummy>("dummies");
             var loadedItem = await coll.Find(e => e.Id == updatedItem.Id).FirstOrDefaultAsync();
@@ -91,7 +91,7 @@ namespace MongoLocks.Tests.Integration
 
             var newItem = new Dummy(Guid.NewGuid(), "lorem ipsum", null, null);
         
-            await Assert.ThrowsAsync<LockException>(async () => await sut.ReleaseLock(newItem, CancellationToken.None));
+            await Assert.ThrowsAsync<LockException>(async () => await sut.ReleaseLockAsync(newItem, CancellationToken.None));
         }
 
         public void Dispose()
