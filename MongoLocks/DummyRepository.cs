@@ -18,7 +18,6 @@ namespace MongoLocks
         private static readonly IBsonSerializer nullableGuidSerializer = new NullableSerializer<Guid>(guidSerializer);
         
         private const string CollectionName = "dummies";
-        private static readonly DateTime Epoch = new DateTime(1970, 1, 1);
 
         static DummyRepository()
         {
