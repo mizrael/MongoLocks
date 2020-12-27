@@ -26,7 +26,6 @@ namespace MongoLocks
             if (!BsonClassMap.IsClassMapRegistered(typeof(Dummy)))
                 BsonClassMap.RegisterClassMap<Dummy>(mapper =>
                 {
-                    mapper.AutoMap();
                     mapper.MapIdField(c => c.Id).SetSerializer(guidSerializer);
                     mapper.MapProperty(c => c.Value);
                     mapper.MapProperty(c => c.LockId).SetSerializer(nullableGuidSerializer)
