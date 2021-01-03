@@ -50,13 +50,14 @@ namespace MongoLocks.Tests.Integration
         [Fact]
         public async Task LockAsync_should_succeed_if_previous_lock_expired()
         {
-            var sut = new DummyRepository(_db, TimeSpan.FromMilliseconds(100));
+            var lockMaxDuration = TimeSpan.FromMilliseconds(100);
+            var sut = new DummyRepository(_db, lockMaxDuration);
 
             var newItem = new Dummy(Guid.NewGuid(), "lorem ipsum", null, null);
             var expiredLockItem = await sut.LockAsync(newItem.Id, newItem, CancellationToken.None);
             expiredLockItem.Should().NotBeNull();
 
-            await Task.Delay(1000);
+            await Task.Delay(lockMaxDuration.Add(TimeSpan.FromSeconds(10)));
             
             var lockedItem = await sut.LockAsync(newItem.Id, newItem, CancellationToken.None);
             lockedItem.Should().NotBeNull();
